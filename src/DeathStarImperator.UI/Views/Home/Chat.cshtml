@@ -5,7 +5,7 @@
 <h2>Chat</h2>
 <div class="container">
     <p>There are currently <span id="viewerCount">0</span> people viewing this page.</p>
-    <div style="height: 500px; max-height: 500px; overflow: auto; margin-bottom: 15px;">
+    <div id="discussionWrapper" style="height: 500px; max-height: 500px; overflow: auto; margin-bottom: 15px;">
         <ul id="discussion" style="list-style-type: none;"></ul>
     </div>
 
@@ -36,6 +36,8 @@
                 // Add the message to the page.
                 $('#discussion').append('<li><strong>[' + htmlEncode(timestamp) + '] ' + htmlEncode(name)
                     + '</strong>: ' + htmlEncode(message) + '</li>');
+                // Scroll div when new messagee is added
+                $('#discussionWrapper').scrollTop($('#discussionWrapper')[0].scrollHeight);
             };
 
             // Get the user name and store it to prepend to messages.
