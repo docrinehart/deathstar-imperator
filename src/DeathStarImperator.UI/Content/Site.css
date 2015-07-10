@@ -1,5 +1,4 @@
 ﻿body {
-    padding-top: 50px;
     padding-bottom: 20px;
 }
 
@@ -18,6 +17,10 @@
 
 .darker-input {
     color: black;
+}
+
+.center-text {
+    text-align: center;
 }
 
 /* Set width on the form input elements since they're 100% wide by default */

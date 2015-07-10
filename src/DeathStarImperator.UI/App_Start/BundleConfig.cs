@@ -24,8 +24,7 @@ namespace DeathStarImperator.UI
                       "~/Scripts/respond.js"));
 
             bundles.Add(new StyleBundle("~/Styles/css").Include(
-                      "~/Content/bootstrap.css", new CssRewriteUrlTransform()).Include(
-                      "~/Content/dark-admin.css",
+                      "~/Content/dark-admin.css", new CssRewriteUrlTransform()).Include(
                       "~/Content/site.css"));
         }
     }
