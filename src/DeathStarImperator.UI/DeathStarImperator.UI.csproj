@@ -142,8 +142,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Hubs\AlertHub.cs" />
     <Compile Include="Hubs\ChatHub.cs" />
     <Compile Include="Hubs\ProgressHub.cs" />
+    <Compile Include="Hubs\ResourceHub.cs" />
     <Compile Include="Models\Job.cs" />
     <Compile Include="Models\JobManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -236,6 +238,12 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DeathStarImperator.Core\DeathStarImperator.Core.csproj">
+      <Project>{aefaf1a2-9581-406a-828d-afe20673c448}</Project>
+      <Name>DeathStarImperator.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DeathStarImperator.Core
+﻿namespace DeathStarImperator.Core
 {
     public class Resource
     {
@@ -20,6 +14,5 @@ namespace DeathStarImperator.Core
             get { return PercentAdjustment.ToString("F2") + "%"; }
         }
 
-        public Resource() { }
     }
 }

@@ -1,10 +1,8 @@
-﻿@{
-    ViewBag.Title = "Home Page";
-}
-
+﻿
 <div class="row">
     <div id="headerCommands" class="col-md-12" style="margin-bottom: 5px;">
-        <a href="#" class="pull-right">CLEAR LOG</a>
+        <a href="#" class="pull-right">CLEAR LOG</a><span class="pull-right"> | </span>
+        <a href="#" class="pull-right" id="makeAlert">MAKE ALERT</a>
     </div>
 </div>
 <div class="row">
@@ -60,13 +58,41 @@
         </table>
     </div>
     <div class="col-md-6" id="alertsWrapper" style="max-height: 500px; overflow: auto;">
-        @for (var i = 0; i < 12; i++)
-        {
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    Some status message here
-                </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                Some status message here
             </div>
-        }
+        </div>
     </div>
 </div>
+
+@section scripts {
+    <script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>
+    <script src="~/signalr/hubs"></script>
+
+    <script>
+        $(function () {
+            var hubProxy = $.connection.alertHub;
+
+            // Create a function that the hub can call back to display messages.
+            hubProxy.client.addNewAlertToPage = function (timestamp, message) {
+                $('#alertsWrapper').prepend('<div class="panel panel-default"><div class="panel-body">'
+                    + '<strong>[' + htmlEncode(timestamp) + ']</strong>: ' + htmlEncode(message) + '</div></div>');
+                $('#alertsWrapper').scrollTop(0);
+            };
+
+            // Start the connection.
+            $.connection.hub.start().done(function () {
+                $('#makeAlert').click(function () {
+                    hubProxy.server.createAlert('This is a test of the Imperial Alert System!');
+                });
+            });
+        });
+
+        // This optional function html-encodes messages for display in the page.
+        function htmlEncode(value) {
+            var encodedValue = $('<div />').text(value).html();
+            return encodedValue;
+        }
+    </script>
+}
