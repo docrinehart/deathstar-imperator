@@ -29,7 +29,6 @@
         $(function () {
             // Reference the auto-generated proxy for the hub.
             var chat = $.connection.chatHub;
-            var pageViewers = $.connection.pageViewersHub;
 
             // Create a function that the hub can call back to display messages.
             chat.client.addNewMessageToPage = function (timestamp, name, message) {
@@ -45,7 +44,7 @@
             // Set initial focus to message input box.
             $('#message').focus();
 
-            pageViewers.client.viewerCountChanged = function (count) {
+            chat.client.viewerCountChanged = function (count) {
                 $("#viewerCount").text(count);
             };
 
