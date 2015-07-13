@@ -143,7 +143,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Hubs\ChatHub.cs" />
-    <Compile Include="Hubs\PageViewersHub.cs" />
     <Compile Include="Hubs\ProgressHub.cs" />
     <Compile Include="Models\Job.cs" />
     <Compile Include="Models\JobManager.cs" />
