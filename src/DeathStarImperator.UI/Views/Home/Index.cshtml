@@ -11,17 +11,11 @@
         <table style="width: 100%; background: none;">
             @foreach (var resource in FakeDataPump.InitResourceList())
             {
-                @ResourceHelper.AddResource(resource)
+                @ResourceHelper.DisplayResource(resource)
             }
         </table>
     </div>
-    <div class="col-md-6" id="alertsWrapper" style="max-height: 700px; overflow: auto;">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                Some status message here
-            </div>
-        </div>
-    </div>
+    <div class="col-md-6" id="alertsWrapper" style="max-height: 700px; overflow: auto;"></div>
 </div>
 
 @section scripts {
