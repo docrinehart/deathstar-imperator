@@ -1,63 +1,21 @@
-﻿
+﻿@using DeathStarImperator.Core
+
 <div class="row">
-    <div id="headerCommands" class="col-md-12 text-right" style="margin-bottom: 5px;">
+    <div id="headerCommands" class="col-md-12 text-right" style="margin-bottom: 20px;">
         <a href="#" id="makeAlert">MAKE ALERT</a> |
         <a href="#" id="clearAlertLog">CLEAR LOG</a>
     </div>
 </div>
-<div class="row">
+<div class="row" style="min-height: 700px;">
     <div class="col-md-6">
         <table style="width: 100%; background: none;">
-            @for (var i = 0; i < 4; i++)
+            @foreach (var resource in FakeDataPump.InitResourceList())
             {
-                <tr>
-                    <td>STORM TROOPER</td>
-                    <td>1/1000</td>
-                    <td>(+1.00/min)</td>
-                    <td style="color: green;">[5.00%]</td>
-                    <td style="min-width: 100px;">
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-info" style="width: 50%"></div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>TIE FIGHTER</td>
-                    <td>1/1000</td>
-                    <td>(+0.50/min)</td>
-                    <td style="color: green;">[15.00%]</td>
-                    <td style="min-width: 100px;">
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-info" style="width: 80%"></div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>ADV. TIE FIGHTER</td>
-                    <td>1/1000</td>
-                    <td>(+1.00/day)</td>
-                    <td style="color: green;"></td>
-                    <td style="min-width: 100px;">
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-info" style="width: 20%"></div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>STAR DESTROYER</td>
-                    <td>1/1000</td>
-                    <td>(+0.01/day)</td>
-                    <td style="color: red;">[50.00%]</td>
-                    <td style="min-width: 100px;">
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-info" style="width: 99%"></div>
-                        </div>
-                    </td>
-                </tr>
+                @ResourceHelper.AddResource(resource)
             }
         </table>
     </div>
-    <div class="col-md-6" id="alertsWrapper" style="max-height: 500px; overflow: auto;">
+    <div class="col-md-6" id="alertsWrapper" style="max-height: 700px; overflow: auto;">
         <div class="panel panel-default">
             <div class="panel-body">
                 Some status message here
@@ -72,19 +30,22 @@
 
     <script>
         $(function () {
-            var hubProxy = $.connection.alertHub;
+            var alertHubProxy = $.connection.alertHub;          
 
             // Create a function that the hub can call back to display messages.
-            hubProxy.client.addNewAlertToPage = function (timestamp, message) {
+            alertHubProxy.client.addNewAlertToPage = function (timestamp, message) {
                 $('#alertsWrapper').prepend('<div class="panel panel-default"><div class="panel-body">'
                     + '<strong>[' + htmlEncode(timestamp) + ']</strong>: ' + htmlEncode(message) + '</div></div>');
                 $('#alertsWrapper').scrollTop(0);
             };
 
+            var resourceHubProxy = $.connection.resourceHub;
+
+
             // Start the connection.
             $.connection.hub.start().done(function () {
                 $('#makeAlert').click(function () {
-                    hubProxy.server.createAlert('This is a test of the Imperial Alert System!');
+                    alertHubProxy.server.createAlert('This is a test of the Imperial Alert System!');
                 });
             });
         });
@@ -99,7 +60,6 @@
         $('#clearAlertLog').click(function () {
             $('#alertsWrapper').empty();
         });
-
 
     </script>
 }
