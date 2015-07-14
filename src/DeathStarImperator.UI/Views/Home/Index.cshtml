@@ -1,8 +1,8 @@
 ﻿
 <div class="row">
-    <div id="headerCommands" class="col-md-12" style="margin-bottom: 5px;">
-        <a href="#" class="pull-right">CLEAR LOG</a><span class="pull-right"> | </span>
-        <a href="#" class="pull-right" id="makeAlert">MAKE ALERT</a>
+    <div id="headerCommands" class="col-md-12 text-right" style="margin-bottom: 5px;">
+        <a href="#" id="makeAlert">MAKE ALERT</a> |
+        <a href="#" id="clearAlertLog">CLEAR LOG</a>
     </div>
 </div>
 <div class="row">
@@ -94,5 +94,12 @@
             var encodedValue = $('<div />').text(value).html();
             return encodedValue;
         }
+
+        // Other local view scripts
+        $('#clearAlertLog').click(function () {
+            $('#alertsWrapper').empty();
+        });
+
+
     </script>
 }
