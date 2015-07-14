@@ -23,6 +23,21 @@
     text-align: center;
 }
 
+.bonus-good {
+    color: green;
+}
+.bonus-bad {
+    color: red;
+}
+
+.resource-name, .resource-minqty, .resource-maxqty, .resource-rate, .resource-bonus {
+    white-space: nowrap;
+    padding-right: 15px;
+}
+.resource-progress {
+    width: 100%;
+}
+
 /* Set width on the form input elements since they're 100% wide by default */
 /*input,
 select,

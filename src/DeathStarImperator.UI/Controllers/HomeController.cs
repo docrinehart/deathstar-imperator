@@ -8,6 +8,7 @@ namespace DeathStarImperator.UI.Controllers
     {
         public ActionResult Index()
         {
+            ViewBag.Title = "Home";
             return View();
         }
 
