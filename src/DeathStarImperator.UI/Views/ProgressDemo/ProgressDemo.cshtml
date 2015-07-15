@@ -33,7 +33,7 @@
             $('#startButton').prop('disabled', true);
             $('#startButton').css('display', 'none');
             $.ajax({
-                url: '/home/dojob',
+                url: '/progressdemo/dojob',
                 method: 'POST',
                 success: function (data) {
                     trackJobProgress(data);
