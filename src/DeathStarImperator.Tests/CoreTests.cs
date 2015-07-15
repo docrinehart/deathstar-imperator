@@ -1,14 +1,13 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Shouldly;
 
 namespace DeathStarImperator.Tests
 {
-    [TestClass]
     public class CoreTests
     {
-        [TestMethod]
-        public void TestMethod1()
+        public void ShouldPass()
         {
+            bool thisIsTrue = true;
+            thisIsTrue.ShouldBe(true);
         }
     }
 }
