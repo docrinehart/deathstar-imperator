@@ -12,10 +12,10 @@ using System.Runtime.InteropServices;
 //------------------------------------------------------------------------------
 
 [assembly: ComVisibleAttribute(false)]
-[assembly: AssemblyVersionAttribute("0.1.1.1")]
-[assembly: AssemblyFileVersionAttribute("0.1.1.1")]
+[assembly: AssemblyVersionAttribute("0.1.1.4")]
+[assembly: AssemblyFileVersionAttribute("0.1.1.4")]
 [assembly: AssemblyCopyrightAttribute("Copyright 2015")]
 [assembly: AssemblyProductAttribute("DeathStar Imperator")]
 [assembly: AssemblyCompanyAttribute("Doc Rinehart")]
 [assembly: AssemblyConfigurationAttribute("release")]
-[assembly: AssemblyInformationalVersionAttribute("0.1.1.1")]
+[assembly: AssemblyInformationalVersionAttribute("0.1.1.4")]
