@@ -17,11 +17,20 @@ properties {
 		update-buildcounter "$buildCounter" "localbuildcounter.vars.ps1"
 		$version = "$majorVersion.$minorVersion.$versionType.$buildCounter"
 	}
+	
+	$ReleaseNumber =  $version
+
+	Write-Host "================================================="
+	Write-Host "Release Number: $ReleaseNumber"
+	Write-Host "================================================="
+	
 	$base_dir = resolve-path .
 	$build_dir = "$base_dir\build"
 	$source_dir = "$base_dir\src"
 	$test_dir = "$build_dir\test"
 	$result_dir = "$build_dir\results"
+	
+	$test_assembly_patterns_unit = @("*Tests.dll")
 
 	if(Test-Path .\localbuild.vars.ps1) {
 		Write-Host "Detected local path variable overrides. Loading localbuild.vars.ps1"  -foregroundcolor Green;
@@ -36,7 +45,7 @@ properties {
 #These are aliases for other build tasks. They typically are named after the camelcase letters (rad = Rebuild All Databases)
 #aliases should be all lowercase, conventionally
 #please list all aliases in the help task
-task default -depends DeveloperBuild
+task default -depends InitialPrivateBuild
 task dev -depends DeveloperBuild
 task release -depends ReleaseBuild
 
@@ -52,7 +61,9 @@ task help {
 }
 
 #These are the actual build tasks. They should be Pascal case by convention
-task DeveloperBuild -depends Clean, CommonAssemblyInfo, Compile
+task InitialPrivateBuild -depends Clean, CommonAssemblyInfo, Compile, RunAllTests
+
+task DeveloperBuild -depends Clean, CommonAssemblyInfo, Compile, RunAllTests
 
 task ReleaseBuild -depends SetReleaseBuild, Clean, CommonAssemblyInfo, Compile
 
@@ -62,6 +73,14 @@ task SetReleaseBuild {
 
 task RestoreNuget {
 	exec { & src\.nuget\nuget.exe restore .\src\DeathStarImperator.sln -OutputDirectory src\packages }
+}
+
+task CopyAssembliesForTest -Depends Compile {
+    copy_all_assemblies_for_test $test_dir
+}
+
+task RunAllTests -Depends CopyAssembliesForTest {
+    $test_assembly_patterns_unit | %{ run_fixie_tests $_ }
 }
 
 task CommonAssemblyInfo {
@@ -152,10 +171,9 @@ function Write-Help-For-Alias($alias,$description) {
 # generalized functions 
 # --------------------------------------------------------------------------------------------------------------
 
-function run_tests([string]$pattern) {
-	
-	$items = Get-ChildItem -Path $test_dir $pattern
-	$items | %{ run_nunit $_.Name }
+function run_fixie_tests([string]$pattern) {
+    $items = Get-ChildItem -Path $test_dir $pattern
+    $items | %{ run_fixie $_.Name }
 }
 
 function global:zip_directory($directory,$file) {
@@ -178,11 +196,11 @@ function global:create_directory($directory_name) {
   mkdir $directory_name  -ErrorAction SilentlyContinue  | out-null
 }
 
-function global:run_nunit ($test_assembly) {
+function global:run_fixie ($test_assembly) {
 	$assembly_to_test = $test_dir + "\" + $test_assembly
 	$results_output = $result_dir + "\" + $test_assembly + ".xml"
-	write-host "Running NUnit Tests in: " $test_assembly
-	exec { & src\packages\NUnit.Runners.2.6.2\tools\nunit-console-x86.exe $assembly_to_test /nologo /nodots /xml=$results_output /exclude=DataLoader}
+	write-host "Running Fixie Tests in: " $test_assembly
+	exec { & tools\fixie\Fixie.Console.exe $assembly_to_test --NUnitXml $results_output --TeamCity off }
 }
 
 function global:Copy_and_flatten ($source,$include,$dest) {
