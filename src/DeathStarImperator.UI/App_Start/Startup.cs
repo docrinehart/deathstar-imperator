@@ -17,15 +17,10 @@ namespace DeathStarImperator.UI
         public void Configuration(IAppBuilder app)
         {
             // Configure StructureMap for SignalR
-            var resolver = DependencyResolver.Current.GetService<IDependencyResolver>();
-            var hubConfiguration = new HubConfiguration
-            {
-                Resolver = resolver
-                /* other options as required */
-            };
+            GlobalHost.DependencyResolver = DependencyResolver.Current.GetService<IDependencyResolver>();
 
             // Any connection or hub wire up and configuration should go here
-            app.MapSignalR(hubConfiguration);
+            app.MapSignalR();
         }
     }
 
