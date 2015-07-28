@@ -173,8 +173,9 @@
     <Compile Include="Hubs\ChatHub.cs" />
     <Compile Include="Hubs\ProgressHub.cs" />
     <Compile Include="Hubs\ResourceHub.cs" />
-    <Compile Include="Models\Job.cs" />
-    <Compile Include="Models\JobManager.cs" />
+    <Compile Include="Models\ProgressJob.cs" />
+    <Compile Include="Models\ProgressMonitor.cs" />
+    <Compile Include="Models\ProgressJobGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

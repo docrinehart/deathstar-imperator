@@ -15,6 +15,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using DeathStarImperator.UI.Models;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.AspNet.SignalR.Infrastructure;
@@ -37,6 +38,8 @@ namespace DeathStarImperator.UI.DependencyResolution {
             For<IDependencyResolver>().Singleton().Use<StructureMapSignalRDependencyResolver>();
             For<IConnectionManager>().Use<ConnectionManager>();
 
+            For<IProgressMonitor>().Singleton().Use<ProgressMonitor>();
+            For<IProgressJobGenerator>().Singleton().Use<ProgressJobGenerator>();
         }
 
         #endregion
