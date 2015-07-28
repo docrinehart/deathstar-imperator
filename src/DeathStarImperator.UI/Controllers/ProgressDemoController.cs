@@ -9,6 +9,13 @@ namespace DeathStarImperator.UI.Controllers
 {
     public class ProgressDemoController : Controller
     {
+        private readonly IProgressJobGenerator _progressJobGenerator ;
+
+        public ProgressDemoController(IProgressJobGenerator progressJobGenerator)
+        {
+            _progressJobGenerator = progressJobGenerator;
+        }
+
         public ActionResult ProgressDemo()
         {
             return View();
@@ -17,7 +24,7 @@ namespace DeathStarImperator.UI.Controllers
         [HttpPost]
         public ActionResult DoJob()
         {
-            var job = JobManager.Instance.DoJobAsync(j =>
+            var job = _progressJobGenerator.Execute(j =>
             {
                 for (var progress = 0; progress <= 100; progress++)
                 {

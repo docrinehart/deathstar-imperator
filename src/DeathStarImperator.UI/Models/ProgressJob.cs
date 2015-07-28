@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace DeathStarImperator.UI.Models
 {
-    public class Job
+    public class ProgressJob
     {
         public event EventHandler<EventArgs> ProgressChanged;
         public event EventHandler<EventArgs> Completed;
@@ -12,7 +12,7 @@ namespace DeathStarImperator.UI.Models
         private volatile bool _completed;
         private CancellationTokenSource _cancellationTokenSource;
 
-        public Job(string id)
+        public ProgressJob(string id)
         {
             Id = id;
             _cancellationTokenSource = new CancellationTokenSource();
