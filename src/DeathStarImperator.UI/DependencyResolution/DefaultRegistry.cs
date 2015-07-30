@@ -15,9 +15,10 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using DeathStarImperator.Core;
+using DeathStarImperator.UI.Hubs;
 using DeathStarImperator.UI.Models;
 using Microsoft.AspNet.SignalR;
-using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.AspNet.SignalR.Infrastructure;
 
 namespace DeathStarImperator.UI.DependencyResolution {
@@ -25,7 +26,6 @@ namespace DeathStarImperator.UI.DependencyResolution {
     using StructureMap.Graph;
 	
     public class DefaultRegistry : Registry {
-        #region Constructors and Destructors
 
         public DefaultRegistry() {
             Scan(
@@ -34,14 +34,25 @@ namespace DeathStarImperator.UI.DependencyResolution {
                     scan.WithDefaultConventions();
 					scan.With(new ControllerConvention());
                 });
-            //For<IExample>().Use<Example>();
+
+            
             For<IDependencyResolver>().Singleton().Use<StructureMapSignalRDependencyResolver>();
             For<IConnectionManager>().Use<ConnectionManager>();
 
             For<IProgressMonitor>().Singleton().Use<ProgressMonitor>();
             For<IProgressJobGenerator>().Singleton().Use<ProgressJobGenerator>();
+
+            For<IAlertHub>().Use<AlertHub>();
+            For<IResourceHub>().Use<ResourceHub>();
+
+            For<Imperator>().Singleton().Use<Imperator>();
+            For<ResourceCreator>().Use<ResourceCreator>();
+            For<GlobalTimer>().Use<GlobalTimer>();            
+            For<JobProcessor>().Use<JobProcessor>();
+            For<JobSpawner>().Singleton().Use<JobSpawner>();
+            
+            
         }
 
-        #endregion
     }
 }

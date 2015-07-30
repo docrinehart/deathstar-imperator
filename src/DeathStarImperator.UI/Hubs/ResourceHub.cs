@@ -3,7 +3,7 @@ using Microsoft.AspNet.SignalR;
 
 namespace DeathStarImperator.UI.Hubs
 {
-    public class ResourceHub : Hub
+    public class ResourceHub : Hub, IResourceHub
     {
         public void UpdateResources()
         {
