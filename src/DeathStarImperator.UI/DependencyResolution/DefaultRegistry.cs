@@ -34,23 +34,12 @@ namespace DeathStarImperator.UI.DependencyResolution {
                     scan.WithDefaultConventions();
 					scan.With(new ControllerConvention());
                 });
-
             
             For<IDependencyResolver>().Singleton().Use<StructureMapSignalRDependencyResolver>();
             For<IConnectionManager>().Use<ConnectionManager>();
 
             For<IProgressMonitor>().Singleton().Use<ProgressMonitor>();
             For<IProgressJobGenerator>().Singleton().Use<ProgressJobGenerator>();
-
-            For<IAlertHub>().Use<AlertHub>();
-            For<IResourceHub>().Use<ResourceHub>();
-
-            For<Imperator>().Singleton().Use<Imperator>();
-            For<ResourceCreator>().Use<ResourceCreator>();
-            For<GlobalTimer>().Use<GlobalTimer>();            
-            For<JobProcessor>().Use<JobProcessor>();
-            For<JobSpawner>().Singleton().Use<JobSpawner>();
-            
             
         }
 

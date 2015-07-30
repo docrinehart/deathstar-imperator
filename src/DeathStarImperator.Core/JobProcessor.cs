@@ -10,15 +10,15 @@ namespace DeathStarImperator.Core
     {
         private readonly List<ResourceJob> _runningJobs;
         private readonly JobSpawner _jobSpawner;
-        private readonly IHubContext _alertHub;
+        private readonly IHubClient _alertHubProxy;
 
         private List<Resource> _tempJobList;
 
-        public JobProcessor(JobSpawner jobSpawner, IConnectionManager connectionManager)
+        public JobProcessor(JobSpawner jobSpawner, IHubClient hubProxyClient)
         {
             _jobSpawner = jobSpawner;
             _runningJobs = _runningJobs = new List<ResourceJob>();
-            _alertHub = connectionManager.GetHubContext<IAlertHub>();
+            _alertHubProxy = hubProxyClient;
         }
 
         public void UpdateProgress()
@@ -33,7 +33,8 @@ namespace DeathStarImperator.Core
                     // AdjustResources
 
                     // AlertComplete
-                    _alertHub.Clients.All.CreateAlert("Completed Resource: " + resJob.ResourceName);
+                    _alertHubProxy.CreateAlert("Completed Resource: " + resJob.ResourceName);
+                    //_alertHubProxy.Clients.All.CreateAlert("Completed Resource: " + resJob.ResourceName);
 
                     //resJob.Finish();
                     _runningJobs.Remove(resJob);
@@ -41,13 +42,16 @@ namespace DeathStarImperator.Core
                 }
                     
                 // ReportProgress
-                _alertHub.Clients.All.CreateAlert(resJob.Progress + "/" + resJob.TargetValue + " Progress from Resource: " + resJob.ResourceName);
+                var msg = resJob.Progress + "/" + resJob.TargetValue + " Progress from Resource: " + resJob.ResourceName;
+                _alertHubProxy.CreateAlert(msg);
+                //_alertHubProxy.Clients.All.CreateAlert(msg);
             }
             
         }
 
         public void AddJob(Resource jobType)
         {
+            _alertHubProxy.CreateAlert(jobType.TableId + " Job Added");
             _runningJobs.Add(_jobSpawner.SpawnJob(jobType));
         }
 
@@ -56,4 +60,12 @@ namespace DeathStarImperator.Core
             _tempJobList = resources;
         }
     }
+
+    public interface IHubClient
+    {
+        void OpenConnection();
+        void CreateAlert(string msg);
+    }
+
+    
 }

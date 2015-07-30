@@ -1,9 +1,11 @@
 ﻿using System;
 using DeathStarImperator.Core;
 using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Hubs;
 
 namespace DeathStarImperator.UI.Hubs
 {
+    [HubName("alertHub")]
     public class AlertHub : Hub, IAlertHub
     {
         public void CreateAlert(string message)
