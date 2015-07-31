@@ -11,7 +11,6 @@ namespace DeathStarImperator.WebJob
             // Create a IPC wait handle with a unique identifier.
             bool createdNew;
             var waitHandle = new EventWaitHandle(false, EventResetMode.AutoReset, "ImperatorWaitHandle", out createdNew);
-            var signaled = false;
 
             // If the handle was already there, inform the other process to exit itself.
             // Afterwards we'll also die.
@@ -23,7 +22,6 @@ namespace DeathStarImperator.WebJob
 
                 return;
             }
-
 
             Console.WriteLine("Initializing Container...");
             var container = new ContainerInitializer().Initialize();
