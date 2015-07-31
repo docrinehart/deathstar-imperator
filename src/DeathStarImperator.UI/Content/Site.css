@@ -23,20 +23,21 @@
     text-align: center;
 }
 
-.bonus-good {
+.bonus-good, .success-alert {
     color: green;
 }
-.bonus-bad {
+.bonus-bad, .failed-alert {
     color: red;
 }
 
-.resource-name, .resource-minqty, .resource-maxqty, .resource-rate, .resource-bonus {
+.resource-name, .resource-qty, .resource-maxqty, .resource-rate, .resource-bonus {
     white-space: nowrap;
     padding-right: 15px;
 }
 .resource-progress {
     width: 100%;
 }
+
 
 /* Set width on the form input elements since they're 100% wide by default */
 /*input,

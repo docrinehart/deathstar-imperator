@@ -9,7 +9,7 @@
 <div class="row" style="min-height: 700px;">
     <div class="col-md-6">
         <table style="width: 100%; background: none;">
-            @foreach (var resource in FakeDataPump.InitResourceList())
+            @foreach (var resource in new ResourceCreator().InitResources())
             {
                 @ResourceHelper.DisplayResource(resource)
             }
@@ -27,19 +27,32 @@
             var alertHubProxy = $.connection.alertHub;          
 
             // Create a function that the hub can call back to display messages.
-            alertHubProxy.client.addNewAlertToPage = function (timestamp, message) {
-                $('#alertsWrapper').prepend('<div class="panel panel-default"><div class="panel-body">'
+            alertHubProxy.client.addNewAlertToPage = function (timestamp, message, alertClass) {
+                $('#alertsWrapper').prepend('<div class="panel panel-default"><div class="panel-body ' + alertClass + '">'
                     + '<strong>[' + htmlEncode(timestamp) + ']</strong>: ' + htmlEncode(message) + '</div></div>');
                 $('#alertsWrapper').scrollTop(0);
             };
 
+
             var resourceHubProxy = $.connection.resourceHub;
+
+            resourceHubProxy.client.updateResourceProgress = function(resourceJobs) {
+                resourceJobs.forEach(function(job) {
+                    $('#' + job.ResourceId).find('.progress-bar').css('width', job.ProgressWidth);
+                });
+            }
+
+            resourceHubProxy.client.updateResourceInfo = function (resources) {
+                resources.forEach(function (res) {
+                    $('#' + res.TableId).find('.resource-qty').text(res.Quantity);
+                });
+            }
 
 
             // Start the connection.
             $.connection.hub.start().done(function () {
                 $('#makeAlert').click(function () {
-                    alertHubProxy.server.createAlert('This is a test of the Imperial Alert System!');
+                    alertHubProxy.server.createAlert('This is a test of the Imperial Alert System!', 'success');
                 });
             });
         });

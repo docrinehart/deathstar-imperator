@@ -13,7 +13,7 @@ namespace DeathStarImperator.UI.Models
 
     public class ProgressMonitor : IProgressMonitor
     {
-        private IHubContext _hubContext;
+        private readonly IHubContext _hubContext;
 
         public ProgressMonitor()
         {

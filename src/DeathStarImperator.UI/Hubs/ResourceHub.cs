@@ -1,14 +1,21 @@
-﻿using DeathStarImperator.Core;
+﻿using System.Collections.Generic;
+using DeathStarImperator.Core;
 using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Hubs;
 
 namespace DeathStarImperator.UI.Hubs
 {
-    public class ResourceHub : Hub
+    [HubName("resourceHub")]
+    public class ResourceHub : Hub, IResourceHub
     {
-        public void UpdateResources()
+        public void UpdateResourceInfo(List<Resource> resources)
         {
-            var resourceList = FakeDataPump.InitResourceList();
-            Clients.All.updateResourceInfo(resourceList);
+            Clients.All.updateResourceInfo(resources);
+        }
+
+        public void UpdateProgressBars(List<ResourceJob> resourceJobs)
+        {
+            Clients.All.updateResourceProgress(resourceJobs);
         }
     }
 }

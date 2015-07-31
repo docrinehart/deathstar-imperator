@@ -6,7 +6,6 @@ using Microsoft.AspNet.SignalR;
 using Owin;
 using Microsoft.Owin;
 using StructureMap;
-using StructureMap.Configuration.DSL;
 using IDependencyResolver = Microsoft.AspNet.SignalR.IDependencyResolver;
 
 [assembly: OwinStartup(typeof(DeathStarImperator.UI.Startup))]
