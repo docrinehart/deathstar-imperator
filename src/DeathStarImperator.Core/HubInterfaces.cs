@@ -1,15 +1,20 @@
-﻿using Microsoft.AspNet.SignalR.Hubs;
+﻿using System.Collections.Generic;
 
 namespace DeathStarImperator.Core
 {
-    public interface IResourceHub : IHub
+    public interface IHubClient : IResourceHub, IAlertHub
     {
-        void UpdateResources();
+        void OpenConnection();        
     }
 
-    public interface IAlertHub : IHub
+    public interface IResourceHub
     {
-        void CreateAlert(string message);
+        void UpdateResourceInfo(List<Resource> resources);
+        void UpdateProgressBars(List<ResourceJob> resourceJobs);
     }
 
+    public interface IAlertHub
+    {
+        void CreateAlert(string message, string messageClass);
+    }
 }

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNet.SignalR;
-using Microsoft.AspNet.SignalR.Infrastructure;
 
 namespace DeathStarImperator.Core
 {
@@ -10,18 +7,21 @@ namespace DeathStarImperator.Core
     {
         private readonly List<ResourceJob> _runningJobs;
         private readonly JobSpawner _jobSpawner;
-        private readonly IHubClient _alertHubProxy;
+        private readonly ResourceAdjuster _resourceAdjuster;
+        private readonly IHubClient _hubClient;
 
         private List<Resource> _tempJobList;
 
-        public JobProcessor(JobSpawner jobSpawner, IHubClient hubProxyClient)
+        public JobProcessor(JobSpawner jobSpawner, ResourceAdjuster resourceAdjuster, IHubClient hubClient)
         {
             _jobSpawner = jobSpawner;
+            _resourceAdjuster = resourceAdjuster;
+            _hubClient = hubClient;            
+
             _runningJobs = _runningJobs = new List<ResourceJob>();
-            _alertHubProxy = hubProxyClient;
         }
 
-        public void UpdateProgress()
+        public List<Resource> UpdateProgress(List<Resource> resourceCache)
         {
             var endingJobs = new List<ResourceJob>();
             foreach (var resJob in _runningJobs)
@@ -29,35 +29,39 @@ namespace DeathStarImperator.Core
                 // Adjust Progress
                 resJob.Progress += 1;
 
-                if (resJob.HasFinished)
-                {
-                    // AdjustResources
+                if (!resJob.HasFinished) { continue; }
 
-                    // AlertComplete
-                    _alertHubProxy.CreateAlert("Completed Resource: " + resJob.ResourceName);
-                    //_alertHubProxy.Clients.All.CreateAlert("Completed Resource: " + resJob.ResourceName);
+                // AdjustResources
+                var completedResource = resourceCache.Single(r => r.TableId == resJob.ResourceId);
+                var result = _resourceAdjuster.IncrementQuantity(completedResource, 1);
+                // TODO: Handle result.Succeeded == false
+                var cacheIndex = resourceCache.IndexOf(completedResource);
+                resourceCache[cacheIndex] = result.AdjustedResource;
 
-                    //resJob.Finish();
-                    endingJobs.Add(resJob);
-                }
-                    
-                // ReportProgress
-                var msg = resJob.Progress + "/" + resJob.TargetValue + " Progress from Resource: " + resJob.ResourceName;
-                _alertHubProxy.CreateAlert(msg);
-                //_alertHubProxy.Clients.All.CreateAlert(msg);
+                // AlertComplete
+                _hubClient.CreateAlert("Completed Resource: " + resJob.ResourceName, "success");
+
+                // Add to list of ending jobs
+                endingJobs.Add(resJob);
             }
 
             foreach (var completedJob in endingJobs)
             {
                 _runningJobs.Remove(completedJob);
-                AddJob(_tempJobList.Single(j => j.TableId == "stormTrooper"));
+
+                // TODO: Check if Job can respawn; For now, always respawn
+                AddJob(_tempJobList.Single(j => j.TableId == completedJob.ResourceId));                
             }
-            
+
+            // ReportProgress
+            _hubClient.UpdateProgressBars(_runningJobs);
+            _hubClient.UpdateResourceInfo(resourceCache);
+            return resourceCache;
         }
 
         public void AddJob(Resource jobType)
         {
-            _alertHubProxy.CreateAlert(jobType.TableId + " Job Added");
+            _hubClient.CreateAlert(jobType.TableId + " Job Added", "default");
             _runningJobs.Add(_jobSpawner.SpawnJob(jobType));
         }
 
@@ -66,12 +70,4 @@ namespace DeathStarImperator.Core
             _tempJobList = resources;
         }
     }
-
-    public interface IHubClient
-    {
-        void OpenConnection();
-        void CreateAlert(string msg);
-    }
-
-    
 }

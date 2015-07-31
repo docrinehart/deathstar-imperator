@@ -40,7 +40,6 @@ namespace DeathStarImperator.UI.DependencyResolution {
 
             For<IProgressMonitor>().Singleton().Use<ProgressMonitor>();
             For<IProgressJobGenerator>().Singleton().Use<ProgressJobGenerator>();
-            
         }
 
     }

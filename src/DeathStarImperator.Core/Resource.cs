@@ -2,15 +2,19 @@
 {
     public class Resource
     {
-        public Resource(string name, string tableId, int productionValue)
+        public Resource(string name, string tableId, int productionValue, int maxQuantity)
         {
             Name = name;
             TableId = tableId;
             ProductionValue = productionValue;
 
             Quantity = 0;
-            MaxQuantity = 0;
+            MaxQuantity = maxQuantity;
             PercentAdjustment = 0;            
+        }
+
+        public Resource()
+        {
         }
 
         public string Name { get; set; }

@@ -24,5 +24,18 @@ namespace DeathStarImperator.Core
             _worldTimer.Begin(_allResources);
         }
 
+        public void TogglePause(bool pause)
+        {
+            if (pause)
+            {
+                _worldTimer.Pause();
+            }
+            else
+            {
+                _worldTimer.Resume();
+            }
+            
+        }
+
     }
 }

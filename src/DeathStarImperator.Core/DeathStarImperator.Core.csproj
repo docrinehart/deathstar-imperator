@@ -69,6 +69,7 @@
     <Compile Include="JobSpawner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource.cs" />
+    <Compile Include="ResourceAdjuster.cs" />
     <Compile Include="ResourceCreator.cs" />
     <Compile Include="ResourceJob.cs" />
   </ItemGroup>

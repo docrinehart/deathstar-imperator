@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using DeathStarImperator.Core;
+﻿using DeathStarImperator.Core;
 using StructureMap;
 using StructureMap.Graph;
 
@@ -20,15 +17,16 @@ namespace DeathStarImperator.WebJob
                     scanner.WithDefaultConventions();
                 });
 
+                cfg.For<IHubClient>().Use<HubClient>().Singleton();
                 cfg.For<Imperator>().Use<Imperator>().Singleton();
+                
                 cfg.For<ResourceCreator>().Use<ResourceCreator>();
+                cfg.For<ResourceAdjuster>().Use<ResourceAdjuster>();
                 cfg.For<GlobalTimer>().Use<GlobalTimer>();
                 cfg.For<JobProcessor>().Use<JobProcessor>();
-                cfg.For<JobSpawner>().Singleton().Use<JobSpawner>();
-
-                cfg.For<IHubClient>().Use<HubClient>().Singleton();
-
+                cfg.For<JobSpawner>().Singleton().Use<JobSpawner>();               
             });
+
             StaticContainer = initialize;
             return initialize;
         }

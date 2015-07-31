@@ -8,7 +8,7 @@ namespace DeathStarImperator.Core
         {
             var returnList = new List<Resource>
             {
-                new Resource("Storm Trooper","stormTrooper", 5)
+                new Resource("Storm Trooper","stormTrooper", 5, 1000)
                 {
                     Quantity = 345,
                     MaxQuantity = 7500,

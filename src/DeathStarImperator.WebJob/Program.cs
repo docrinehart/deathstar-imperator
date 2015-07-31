@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Configuration;
 using System.Threading;
 using DeathStarImperator.Core;
-using Microsoft.AspNet.SignalR.Client;
 
 namespace DeathStarImperator.WebJob
 {
@@ -10,47 +8,39 @@ namespace DeathStarImperator.WebJob
     {
         static void Main(string[] args)
         {
-            
-                Console.WriteLine("Initializing Container...");
-                var container = new ContainerInitializer().Initialize();
+            // Create a IPC wait handle with a unique identifier.
+            bool createdNew;
+            var waitHandle = new EventWaitHandle(false, EventResetMode.AutoReset, "ImperatorWaitHandle", out createdNew);
+            var signaled = false;
 
-                Console.WriteLine("Connecting to SignalR Hub");
-                var hubClient = container.GetInstance<IHubClient>();
-                hubClient.OpenConnection();
-
-                var i = container.GetInstance<Imperator>();
-                i.InitializeConfig();
-                i.StartImperator();
-
-            while (true)
+            // If the handle was already there, inform the other process to exit itself.
+            // Afterwards we'll also die.
+            if (!createdNew)
             {
-                // Keeps Imperator from ending
+                Console.WriteLine("Found other Imperator process. Requesting stop...");
+                waitHandle.Set();
+                Console.WriteLine("Informer exited.");
+
+                return;
             }
 
-        }
-    }
 
-    public class HubClient : IHubClient
-    {
-        private readonly string _hubUrl;
-        private IHubProxy _hubProxy;
-        private HubConnection _connection;
+            Console.WriteLine("Initializing Container...");
+            var container = new ContainerInitializer().Initialize();
 
-        public HubClient()
-        {
-            _hubUrl = ConfigurationManager.AppSettings["HubUrlProd"];
-        }
+            Console.WriteLine("Connecting to UI...");
+            var hubClient = container.GetInstance<IHubClient>();
+            hubClient.OpenConnection();
+            Console.WriteLine("Connected");
 
-        public void OpenConnection()
-        {
-            _connection = new HubConnection(_hubUrl);
-            _hubProxy = _connection.CreateHubProxy("alertHub");
-            _connection.Start().Wait();
+            Console.WriteLine("Initializing Imperator...");
+            var i = container.GetInstance<Imperator>();
+            i.InitializeConfig();
+            i.StartImperator();
+           
+            waitHandle.WaitOne();
+            Console.WriteLine("Closing Imperator...");
         }
 
-        public void CreateAlert(string msg)
-        {
-            _hubProxy.Invoke("CreateAlert", msg);
-        }
     }
 }

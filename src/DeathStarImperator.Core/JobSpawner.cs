@@ -7,6 +7,7 @@
             return new ResourceJob
             {
                 ResourceName = jobType.Name,
+                ResourceId = jobType.TableId,
                 TargetValue = jobType.ProductionValue,
                 Progress = 0
             };

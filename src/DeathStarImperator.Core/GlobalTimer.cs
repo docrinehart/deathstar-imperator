@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
 
@@ -7,9 +8,7 @@ namespace DeathStarImperator.Core
     public class GlobalTimer
     {
         private readonly Timer _timer;
-        
         private readonly JobProcessor _jobProcessor;
-        
         private List<Resource> _resourceCache;
 
         public GlobalTimer(JobProcessor jobProcessor)
@@ -18,7 +17,7 @@ namespace DeathStarImperator.Core
 
             _timer = new Timer
             {
-                Interval = 1000,
+                Interval = 100,
                 AutoReset = false,
                 Enabled = true
             };
@@ -27,7 +26,7 @@ namespace DeathStarImperator.Core
 
         private void TickWorldClock(object sender, ElapsedEventArgs e)
         {
-            _jobProcessor.UpdateProgress();
+            _resourceCache = _jobProcessor.UpdateProgress(_resourceCache);
             _timer.Start();
         }
 
@@ -40,7 +39,20 @@ namespace DeathStarImperator.Core
             var trooper = _resourceCache.Single(r => r.TableId.Equals("stormTrooper"));
             _jobProcessor.AddJob(trooper);
 
+            var fighter = _resourceCache.Single(r => r.TableId.Equals("tieFighter"));
+            _jobProcessor.AddJob(fighter);
+
             _timer.Start();
+        }
+
+        public void Pause()
+        {
+            _timer.Enabled = false;
+        }
+
+        public void Resume()
+        {
+            _timer.Enabled = true;
         }
     }
 }
