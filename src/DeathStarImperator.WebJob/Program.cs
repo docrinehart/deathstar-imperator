@@ -10,8 +10,7 @@ namespace DeathStarImperator.WebJob
     {
         static void Main(string[] args)
         {
-            while (true)
-            {
+            
                 Console.WriteLine("Initializing Container...");
                 var container = new ContainerInitializer().Initialize();
 
@@ -22,6 +21,10 @@ namespace DeathStarImperator.WebJob
                 var i = container.GetInstance<Imperator>();
                 i.InitializeConfig();
                 i.StartImperator();
+
+            while (true)
+            {
+                // Keeps Imperator from ending
             }
 
         }

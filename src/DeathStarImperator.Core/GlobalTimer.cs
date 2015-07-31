@@ -18,8 +18,9 @@ namespace DeathStarImperator.Core
 
             _timer = new Timer
             {
-                Interval = 5000,
-                AutoReset = true
+                Interval = 1000,
+                AutoReset = false,
+                Enabled = true
             };
             _timer.Elapsed += TickWorldClock;
         }
@@ -27,6 +28,7 @@ namespace DeathStarImperator.Core
         private void TickWorldClock(object sender, ElapsedEventArgs e)
         {
             _jobProcessor.UpdateProgress();
+            _timer.Start();
         }
 
         public void Begin(List<Resource> resources)

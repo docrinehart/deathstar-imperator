@@ -23,6 +23,7 @@ namespace DeathStarImperator.Core
 
         public void UpdateProgress()
         {
+            var endingJobs = new List<ResourceJob>();
             foreach (var resJob in _runningJobs)
             {
                 // Adjust Progress
@@ -37,14 +38,19 @@ namespace DeathStarImperator.Core
                     //_alertHubProxy.Clients.All.CreateAlert("Completed Resource: " + resJob.ResourceName);
 
                     //resJob.Finish();
-                    _runningJobs.Remove(resJob);
-                    AddJob(_tempJobList.Single(j => j.TableId == "stormTrooper"));
+                    endingJobs.Add(resJob);
                 }
                     
                 // ReportProgress
                 var msg = resJob.Progress + "/" + resJob.TargetValue + " Progress from Resource: " + resJob.ResourceName;
                 _alertHubProxy.CreateAlert(msg);
                 //_alertHubProxy.Clients.All.CreateAlert(msg);
+            }
+
+            foreach (var completedJob in endingJobs)
+            {
+                _runningJobs.Remove(completedJob);
+                AddJob(_tempJobList.Single(j => j.TableId == "stormTrooper"));
             }
             
         }
