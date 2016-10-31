@@ -7,6 +7,8 @@ namespace DeathStarImperator.Core
 {
     public class GlobalTimer
     {
+        public const int PRODUCTION_VALUE_PER_SECOND = 10;
+
         private readonly Timer _timer;
         private readonly JobProcessor _jobProcessor;
         private List<Resource> _resourceCache;
