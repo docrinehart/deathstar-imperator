@@ -6,7 +6,7 @@
         <td class="resource-qty">@resource.Quantity</td>
         <td class="resource-maxqty">/@resource.MaxQuantity</td>
         <td class="resource-rate">@resource.Rate</td>
-        <td class="resource-bonus">@resource.Bonus</td>
+        <td class="resource-bonus @(resource.PercentAdjustment > 0 ? "red-text" : "green-text") ">@resource.Bonus</td>
         <td class="resource-progress">
             <div class="progress">
                 <div class="progress-bar progress-bar-info" style="width: @resource.Progress;"></div>
